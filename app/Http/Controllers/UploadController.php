@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Upload;
-use Excel;
+use Rap2hpoutre\FastExcel\FastExcel;
 
 class UploadController extends Controller
 {
@@ -20,9 +20,10 @@ class UploadController extends Controller
         if ($request->hasFile('import_file') ) {
             $path = $request->file('import_file')->getRealPath();
 
-            $data = Excel::load($path, function($reader) {})->get();
+	    $data= (new FastExcel)->import($path);
 
             if(!empty($data) && $data->count()){
+		dd($data);
                 return back()->with('success','File loaded okay');
             }
 
